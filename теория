@@ -1,3 +1,6 @@
+fdisk -l /dev/sda | grep block
+mknod
+
 Backup MBR  
   $ dd if=/dev/sdX of=/tmp/sda.mbr bs=512 count=1
 
@@ -15,3 +18,20 @@ Backup GPT
 
 Утилиты для работы с партициями: gdisk,parted,partx,partprobe
 Утилиты для работы с информацией о железе: smartctl,hdparm,dmesg,dmidecode
+
+Виды рейдов : Аппаратный, Програмный, Интергрированный(XOR чип)
+mdadm - програмный рейд
+Состав mdadm: Модули ядра,Утилита управления, Утилита мониторинга
+
+Как использовать madm
+Подготовка, занулить суперблок
+  mdadm --zero-superblock $dev_list
+Создание массива
+  mdadm --create $raiddev -l $level -n $numdev $dev_list
+Остановка массива
+  mdadm -S $raiddev
+Информаøиā о массиве
+  mdadm --detail $raiddev
+Генерация данных для конфигурационного файла
+  mdadm --examine --scan
+  mdadm --detail --scan
