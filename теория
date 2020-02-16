@@ -1,0 +1,17 @@
+Backup MBR  
+  $ dd if=/dev/sdX of=/tmp/sda.mbr bs=512 count=1
+
+Восстановление MBR с сохранением таблиøý разделов
+  $ dd if=/tmp/sda.mbr of=/dev/sdb bs=446 count=1
+
+Утилиты для работы с MBR: fdisk, sfdisk
+
+
+Backup GPT
+  $ sgdisk --backup=sda.gpt.bkp /dev/sda
+Восстановление GPT
+  $ sgdisk --load-backup=sda.gpt.bkp /dev/sda
+Утилиты для работы с GPT: gdisk, sgdisk
+
+Утилиты для работы с партициями: gdisk,parted,partx,partprobe
+Утилиты для работы с информацией о железе: smartctl,hdparm,dmesg,dmidecode
