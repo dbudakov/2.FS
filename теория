@@ -27,6 +27,12 @@ mdadm - програмный рейд
 Подготовка, занулить суперблок
   mdadm --zero-superblock $dev_list
 Создание массива
+
+Создать файл подкачки:
+fallocate -l 1G /swapfile
+mkswap /swapfile
+swapon /swapfile
+echo “/swapfile swap swap defaults 0 0” | tee -a /etc/fstab
   mdadm --create $raiddev -l $level -n $numdev $dev_list
 Остановка массива
   mdadm -S $raiddev
@@ -35,3 +41,31 @@ mdadm - програмный рейд
 Генерация данных для конфигурационного файла
   mdadm --examine --scan
   mdadm --detail --scan
+  Информаøиā о массиве
+  cat /proc/mdstat
+Запуск/остановка проверки
+  echo (check|idle) > /sys/block/md${N}/device/action
+Изменение ограничений скорости ребилда
+  grep . /proc/sys/dev/raid/speed_limit_m*
+  /proc/sys/dev/raid/speed_limit_max:200000
+  /proc/sys/dev/raid/speed_limit_min:1000
+  echo 10000 > /proc/sys/dev/raid/speed_limit_min
+
+#### SWAP
+cat /proc/vm/swappiness - процент свободной оперативной памяти, при котором наùинаетсā исполþзование свапа
+echo "vm.swappiness=10" | sudo tee -a /etc/sysctl.conf
+
+Tuning disk
+RAID Levels ( 10 - длā скорости и надежности )
+RAID Controller Cache - например обновление одних и тех же мест в кеш сократит интенсивность записи
+RAID Stripe Size 16 KB, 64 KB, 256 KB or 512 KB - в зависимости от паттерна исполþзования
+mount -o noatime,nodiratime
+sysctl -w vm.dirty_background_ratio=25 - в процентах. Частота сброса данных на диск
+sysctl -w vm.dirty_ratio=20 - в процентах. Величина наполнения кеш до сброса на диск
+#### SSD
+  EXT4/XFS
+Минимизироватþ запись на диск:
+  noatime
+не держать на нем логи в зависимости от паттерна использования
+  systemctl enable fstrim.timer
+  I/O Scheduler: noop
