@@ -56,5 +56,15 @@ mdadm --add /dev/md0 /dev/sdg
 процесс ребилдинга в интерактивном режиме можно посмотреть следующей командой
 ```
 watch cat /proc/mdstat  
-```
+```  
+Создаем и монтируем 5 партиций raid /dev/md0 на разметке gpt  
+```bash
+parted -s /dev/md0 mklabel gpt   
+for i in 0 20 40 60 80;do parted /dev/md0 mkpart primary $i% $(( $i+20 ))% -s; done 
+for i in {1..5};do mkfs.xfs /dev/md0p$i -f ; done  
+for i in {1..5};do mkdir -p /raid/part_$i;done  
+for i in {1..5};do mount /dev/md0p$i /raid/part_$i; done  
+```  
+
+
 [Vagrantfile с собранным raid6 на 6 дисках]()
