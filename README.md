@@ -13,7 +13,7 @@
 
 
 # Решение  
-Добавляем в Vagrantfile ещё два диска в соответствующий раздел:
+Добавляем в [Vagrantfile](https://github.com/dbudakov/2.FS/blob/master/Vagrantfile) ещё два диска в соответствующий раздел:
 ```ruby
 vi ./Vagrantfile  
 MACHINES = {  
