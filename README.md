@@ -68,4 +68,4 @@ for i in {1..5};do mount /dev/md0p$i /raid/part_$i; done
 ```  
 
 
-[Vagrantfile с собранным raid6 на 6 дисках](https://github.com/dbudakov/2.FS/blob/master/Vagrantfile)
+[Vagrantfile с собранным raid6 на 6 дисках](https://github.com/dbudakov/2.FS/blob/master/Vagrantfile_custom)
