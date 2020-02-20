@@ -42,4 +42,4 @@ mdadm --add /dev/md0 /dev/sdg
 ```
 watch cat /proc/mdstat  
 ```
-[Vagrantfile с собранным raid6 на 6 диска]()
+[Vagrantfile с собранным raid6 на 6 дисках]()
