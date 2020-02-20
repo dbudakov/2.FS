@@ -40,7 +40,7 @@ mkfs.xfs /dev/md0 -f &&
 echo $(blkid|grep md0|awk '{print $2 " /mnt xfs defaults 0 0" }') >> /etc/fstab   
 mount -a  
 ```
-##### Ломаем рейд  
+#### Ломаем рейд  
 имитируем падение диска  
 ```
 mdadm --fail /dev/md0 /dev/sdb  
@@ -58,7 +58,7 @@ mdadm --add /dev/md0 /dev/sdg
 ```
 watch cat /proc/mdstat  
 ```  
-##### Создаем и монтируем 5 партиций raid /dev/md0 на разметке gpt  
+#### Создаем и монтируем 5 партиций raid /dev/md0 на разметке gpt  
 ```bash
 parted -s /dev/md0 mklabel gpt   
 for i in 0 20 40 60 80;do parted /dev/md0 mkpart primary $i% $(( $i+20 ))% -s; done 
