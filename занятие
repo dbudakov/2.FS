@@ -1,0 +1,48 @@
+## Занятие по ФС
+# для определения дисков в системе
+lsblk
+df -h
+fdisk -l
+ls /sys/block
+cat /sys/block/sd*/queue/rotational
+find /dev/disk
+
+lspci
+       0000:00:1f.2 #(B/D/F bus/device/function)
+      -v -vv -vvv #больше деталей
+      -tv # дерево соответствует физической структуре
+      -D # показывает домен
+      -nnA # показывает ID устройства
+      -knn # с указанием драйвера к устройству
+      -v -s 00:1f.2 # показать только одно устройство
+ls -l /dev| grep '^b'
+cat /proc/devices
+/usr/lib/udev/rules.d || /run/udev/rules.d || /etc/udev/rules.d # Файл правил генерации имён дисков
+  ## Создание еще одного имени для диска, добавляя свое правило в udev
+udevadm info -n /dev/sda # инфа о диске от ядра
+  vi /etc/udev/rules.d/69-disk.rules
+## Настройка блочных устройств
+  # утилиты:
+  hdparm
+    hdparam -Tt --direct /dev/nvme0n1 # выдаст тест скорости чтения
+    '/usr/bin/hdparm -B 254 -S 0 /deb/sda' # можно добавить в автозагрузку для отключения сна дисков
+    sdparm(SCSI);
+    smartctl #управление и мониторинг дисков, время жизни итд
+  # Файловая система
+  /sys
+
+## Планировщик системы ввода вывода, очередь записи/чтения
+cat /sys/block/sda/queue/scheduler # посмотреть каки поддерживаются
+yum install fio # тестирование дисков
+echo none > /sys/block/sda/queuq/scheduler # смена планировщика
+
+## Утилиты для создания разделов
+# актив ; скрипт
+  fdisk;  sfdisk
+  gdisk;  sgdisk
+  parted; parted
+#Типы райдов
+  #аппаратный: internal,external
+  #программный
+# практика
+cat /proc/mdstat
