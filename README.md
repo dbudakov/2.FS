@@ -67,7 +67,7 @@ watch cat /proc/mdstat
 echo -e $(grep UUID /etc/fstab|grep -v /[m,r])>/etc/fstab
 echo "/swapfile none swap defaults 0 0">>/etc/fstab
 ```
-Далее разбивки и правка /etc/fstab  
+Далее разбивка и правка /etc/fstab  
 ```shell
 #!/bin/bash
 umount /dev/md0
