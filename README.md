@@ -34,7 +34,8 @@ MACHINES = {
            }    
 ```                
 далее написан скрипт для запуска внутри системы на создание,разметку и монтирование raid6 на 6 дисках, в директорию /mnt  
-```bash
+```shell
+#!/bin/bash
 mdadm --create --verbose /dev/md0 --level=6 --raid-devices=5 /dev/sd{b..f} 
 mkfs.xfs /dev/md0 -f &&  
 echo $(blkid|grep md0|awk '{print $2 " /mnt xfs defaults 0 0" }') >> /etc/fstab   
