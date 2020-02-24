@@ -62,6 +62,12 @@ mdadm --add /dev/md0 /dev/sdg
 watch cat /proc/mdstat  
 ```  
 #### Создаем и монтируем 5 партиций raid /dev/md0 на разметке gpt  
+Перед разбивкой необходимо обновить /etc/fstab иначе он будет пытаться монтировать /dev/md0. который мы разделим
+```shell
+echo -e $(grep UUID /etc/fstab|grep -v /[m,r])>/etc/fstab
+echo "/swapfile none swap defaults 0 0">>/etc/fstab
+```
+Далее разбивки и правка /etc/fstab  
 ```shell
 #!/bin/bash
 umount /dev/md0
@@ -69,13 +75,7 @@ parted -s /dev/md0 mklabel gpt
 for i in 0 20 40 60 80;do parted /dev/md0 mkpart primary $i% $(( $i+20 ))% -s; done 
 for i in {1..5};do mkfs.xfs /dev/md0p$i -f ; done  
 for i in {1..5};do mkdir -p /raid/part_$i;done  
-for i in {1..5};do mount /dev/md0p$i /raid/part_$i; done  
-```  
-
-Можно прописать партиции в `/etc/fstab`:  
-```shell
+for i in {1..5};do mount /dev/md0p$i /raid/part_$i; done
 echo -e "$(for i in {1..5};do echo "$(blkid|grep md0p$i |awk '{print $2 }') /raid/part_$i  xfs defaults 0 0" ;done)\n" >> /etc/fstab
-```
-НЕ ЗАГРУЖАЕТСЯ С МОНТИРОВАНИЕ ПАРТИЦИЙ, ОСНОВНОЙ ВАГРАНТ С 6 РЕЙДАМИ НЕ ГРУЗИТ ВОЗМОЖНО НУЖЕН mdadm config
-
+```  
 [Vagrantfile с собранным raid6 на 6 дисках](https://github.com/dbudakov/2.FS/blob/master/Vagrantfile_custom)
