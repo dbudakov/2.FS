@@ -62,7 +62,9 @@ mdadm --add /dev/md0 /dev/sdg
 watch cat /proc/mdstat  
 ```  
 #### Создаем и монтируем 5 партиций raid /dev/md0 на разметке gpt  
-```bash
+```shell
+#!/bin/bash
+umount /dev/md0
 parted -s /dev/md0 mklabel gpt   
 for i in 0 20 40 60 80;do parted /dev/md0 mkpart primary $i% $(( $i+20 ))% -s; done 
 for i in {1..5};do mkfs.xfs /dev/md0p$i -f ; done  
