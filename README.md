@@ -78,4 +78,13 @@ for i in {1..5};do mkdir -p /raid/part_$i;done
 for i in {1..5};do mount /dev/md0p$i /raid/part_$i; done
 echo -e "$(for i in {1..5};do echo "$(blkid|grep md0p$i |awk '{print $2 }') /raid/part_$i  xfs defaults 0 0" ;done)\n" >> /etc/fstab
 ```  
+НЕ МОГУ ПОДЦЕПИТЬСЯ ПРИ ТЕСТЕ УПАКОВАННОГО BOX, не может соза
+```
+==> default: Waiting for machine to boot. This may take a few minutes...
+    default: SSH address: 127.0.0.1:2200
+    default: SSH username: vagrant
+    default: SSH auth method: private key
+    default: Warning: Authentication failure. Retrying...
+vagrant@127.0.0.1: Permission denied (publickey,gssapi-keyex,gssapi-with-mic).
+```
 [Vagrantfile с собранным raid6 на 6 дисках](https://github.com/dbudakov/2.FS/blob/master/Vagrantfile_custom)
