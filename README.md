@@ -39,6 +39,8 @@ mdadm --create --verbose /dev/md0 --level=6 --raid-devices=5 /dev/sd{b..f}
 mkfs.xfs /dev/md0 -f &&  
 echo $(blkid|grep md0|awk '{print $2 " /mnt xfs defaults 0 0" }') >> /etc/fstab   
 mount -a  
+mkdir /etc/mdadm
+mdadm  --detail --scan >> /etc/mdadm/mdadm.conf
 ```
 #### Ломаем рейд  
 имитируем падение диска  
