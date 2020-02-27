@@ -79,4 +79,4 @@ for i in {1..5};do mount /dev/md0p$i /raid/part_$i; done
 echo -e "$(for i in {1..5};do echo "$(blkid|grep md0p$i |awk '{print $2 }') /raid/part_$i  xfs defaults 0 0" ;done)\n" >> /etc/fstab
 ```  
 для упаковки VM в vagrant.box использовалась следующая [инструкция](https://github.com/dbudakov/support/blob/master/vagrant_help.md)  
-[Vagrantfile](https://github.com/dbudakov/2.FS/blob/master/Vagrantfile_custom) со сборкой партиций  
+Vagrantfile со сборкой партиций [перейти](https://github.com/dbudakov/2.FS/blob/master/Vagrantfile_custom)  
