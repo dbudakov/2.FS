@@ -5,17 +5,17 @@ MACHINES = {
   :otuslinux => {
         :box_name => "centos/7",
         :ip_addr => '192.168.11.101',
-	:disks => {
-		:sata1 => {
-			:dfile => './sata1.vdi',
-			:size => 250, # Megabytes
-			:port => 1
-		},
-		:sata2 => {
+        :disks => {
+                :sata1 => {
+                        :dfile => './sata1.vdi',
+                        :size => 250, # Megabytes
+                        :port => 1
+                },
+                :sata2 => {
                         :dfile => './sata2.vdi',
                         :size => 250, # Megabytes
-			:port => 2
-		},
+                        :port => 2
+                },
                 :sata3 => {
                         :dfile => './sata3.vdi',
                         :size => 250, # Megabytes
@@ -38,9 +38,9 @@ MACHINES = {
                         :port => 6
                 }
 
-	}
+        }
 
-		
+
   },
 }
 
@@ -58,15 +58,15 @@ Vagrant.configure("2") do |config|
           box.vm.network "private_network", ip: boxconfig[:ip_addr]
 
           box.vm.provider :virtualbox do |vb|
-            	  vb.customize ["modifyvm", :id, "--memory", "1024"]
+                  vb.customize ["modifyvm", :id, "--memory", "1024"]
                   needsController = false
-		  boxconfig[:disks].each do |dname, dconf|
-			  unless File.exist?(dconf[:dfile])
-				vb.customize ['createhd', '--filename', dconf[:dfile], '--variant', 'Fixed', '--size', dconf[:size]]
+                  boxconfig[:disks].each do |dname, dconf|
+                          unless File.exist?(dconf[:dfile])
+                                vb.customize ['createhd', '--filename', dconf[:dfile], '--variant', 'Fixed', '--size', dconf[:size]]
                                 needsController =  true
                           end
 
-		  end
+                  end
                   if needsController == true
                      vb.customize ["storagectl", :id, "--name", "SATA", "--add", "sata" ]
                      boxconfig[:disks].each do |dname, dconf|
@@ -74,16 +74,30 @@ Vagrant.configure("2") do |config|
                      end
                   end
           end
- 	  box.vm.provision "shell", inline: <<-SHELL
-	      mkdir -p ~root/.ssh
+          box.vm.provision "shell", inline: <<-SHELL
+              mkdir -p ~root/.ssh
               cp ~vagrant/.ssh/auth* ~root/.ssh
-	      yum install -y mdadm smartmontools hdparm gdisk
-	      mdadm --create --verbose /dev/md0 --level=6 --raid-devices=6 /dev/sd{b..g}
-              mkfs.xfs /dev/md0 -f &&
-              echo $(blkid|grep md0|awk '{print $2 " /mnt xfs defaults 0 0" }') >> /etc/fstab
-              mkdir /etc/mdadm && mdadm  --detail --scan >> /etc/mdadm/mdadm.conf
-  	      mount -a
-	  SHELL
+              yum install -y mdadm smartmontools hdparm gdisk
+        
+        disks=/dev/sd{b..g}
+        raid=/dev/md0
+        mdadm --create --verbose /dev/md0 --level=6 --raid-devices=6 /dev/sd{b..g}
+        parted -s $raid mklabel gpt     
+        for i in 0 20 40 60 80;do parted /dev/md0 mkpart primary $i% $(( $i+20 ))% -s;done
+        for i in {1..5};do mkfs.xfs /dev/md0p$i -f ; done  
+        for i in {1..5};do mkdir -p /raid/part_$i;done
+        for i in {1..5};do mount /dev/md0p$i /raid/part_$i; done
+        id() {
+        blkid|grep md0p$i |awk '{print $2 }'
+        }
+        fs() {
+        for i in {1..5};
+        do echo "$(id) /raid/part_$i  xfs defaults 0 0" ;
+        done
+        }
+                echo -e "$(fs)\n" >> /etc/fstab
+                mount -a
+          SHELL
 
       end
   end
