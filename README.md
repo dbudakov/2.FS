@@ -82,4 +82,5 @@ echo -e "$(for i in {1..5};do echo "$(blkid|grep md0p$i |awk '{print $2 }') /rai
 Vagrantfile со сборкой партиций [перейти](https://github.com/dbudakov/2.FS/blob/master/Vagrantfile_custom)  
 
 ### Дополнительно
-[RAID Levels](http://www.raid-calculator.com/raid-types-reference.aspx)  
+RAID Levels [здесь](http://www.raid-calculator.com/raid-types-reference.aspx)  
+Методичка (RAID, NVME) [здесь](https://docs.google.com/document/d/1m4niuv-rxMbLjdQ4qS8xG-UpMlMUA8C5yKRQ3IVEi-M/edit)
