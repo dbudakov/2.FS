@@ -80,3 +80,5 @@ echo -e "$(for i in {1..5};do echo "$(blkid|grep md0p$i |awk '{print $2 }') /rai
 ```  
 для упаковки VM в vagrant.box использовалась следующая [инструкция](https://github.com/dbudakov/support/blob/master/vagrant_help.md)  
 Vagrantfile со сборкой партиций [перейти](https://github.com/dbudakov/2.FS/blob/master/Vagrantfile_custom)  
+
+### Дополнительно
