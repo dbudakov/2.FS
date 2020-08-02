@@ -84,3 +84,4 @@ Vagrantfile со сборкой партиций [перейти](https://github
 ### Дополнительно
 RAID Levels [здесь](http://www.raid-calculator.com/raid-types-reference.aspx)  
 Методичка (RAID, NVME) [здесь](https://docs.google.com/document/d/1m4niuv-rxMbLjdQ4qS8xG-UpMlMUA8C5yKRQ3IVEi-M/edit)
+оставшийся ресурс SSD [здесь](https://bookflow.ru/kak-uznat-ostavshijsya-resurs-ssd-v-linux/)
